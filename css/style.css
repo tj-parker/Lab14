@@ -1,1 +1,24 @@
 /* TODO: Make it awesome */
+
+h1 {
+  font-family: Verdana;
+  font-weight: bold;
+  font-size: 200%;
+  text-decoration: underline;
+  margin: 20px;
+  text-align: center;
+}
+
+a {
+  border-width: thick;
+  border-style: outset;
+  border-color: aqua;
+  background-color: aqua;
+  display: block;
+  text-align: center;
+}
+
+a:hover {
+  color: green;
+  font-weight: bold;
+}
