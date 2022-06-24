@@ -8,7 +8,7 @@ let cart;
 
 function loadCart() {
   const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-  cart = new Cart(cartItems);
+  cart = new Cart(cartItems.items);
 }
 
 // Make magic happen --- re-pull the Cart, clear out the screen and re-draw it
@@ -20,34 +20,52 @@ function renderCart() {
 
 // TODO: Remove all of the rows (tr) in the cart table (tbody)
 function clearCart() {
-  document.getElementById('tbody').removeChild('tr');
+  let tbody = document.querySelector('tbody');
+  tbody.innerHTML = '';
 }
 
 // TODO: Fill in the <tr>'s under the <tbody> for each item in the cart
 function showCart() {
-  for (let i = 0; i < this.cartItems.length; i++) {
-    const tr = document.createElement('tr');
-    tr.cartContent = this.cartItems[i];
+  let tbody = document.querySelector('tbody');
+  // console.log(cart.items.length);
+  for (let i = 0; i < cart.items.length; i++) {
+    let tr = document.createElement('tr');
+     tbody.appendChild(tr);
     
-    tbody.appendChild(tr);
+    let td1 = document.createElement('td');
+    td1.textContent = cart.items[i].product;
+    tr.appendChild(td1);
+    
+
+    let td2 = document.createElement('td');
+    td2.textContent = cart.items[i].quantity;
+    tr.appendChild(td2);
+
+    let td3 = document.createElement('td');
+    td3.addEventListener('click', removeItemFromCart); 
+    td3.textContent = "x";
+    td3.setAttribute('id', i);
+    tr.appendChild(td3);
+    console.log(td3);
+
+   
+    // console.log(tr.id);
+    // const quantityCell = document.createElement('td');
+    // dataRow.appendChild(quantityCell);
+    // quantityCell.textContent = quantity;
   }
+  
+  
+  // const dataRow = document.createElement('tr');
+  // tbody.appendChild(dataRow);
+
     
-  const dataRow = document.createElement('tr');
-  tbody.appendChild(dataRow);
 
-    const deleteLink = document.createElement('td');
-    dataRow.appendChild(deleteLink);
-    deleteLink.addEventListener('click', removeItemFromCart);
+  //   // const item = document.createElement('td');
+  //   // dataRow.appendChild(item);
+  //   // item.textContent = product;
 
-    const quantityCell = document.createElement('td');
-    dataRow.appendChild(quantityCell);
-    quantityCell.textContent = this.quantity;
-
-    const item = document.createElement('td');
-    dataRow.appendChild(item);
-    item.textContent = this.product;
-
-    tbody.appendChild(dataRow);
+  //   tbody.appendChild(dataRow);
 
   // TODO: Find the table body
 
@@ -59,11 +77,10 @@ function showCart() {
 }
 
 function removeItemFromCart(event) {
-  Cart.prototype.removeItem();
-  Cart.prototype.saveToLocalStorage();
-  document.getElementById('tr').removedChild('td');
-  const deleteLink = document.createElement('td');
-    dataRow.appendChild(deleteLink);
+  console.log(cart.items[event.target.id]); 
+  cart.removeItem(cart.items[event.target.id]);
+  cart.saveToLocalStorage();
+  renderCart();
   // TODO: When a delete link is clicked, use cart.removeItem to remove the correct item
   // TODO: Save the cart back to local storage
   // TODO: Re-draw the cart table
